@@ -1,10 +1,20 @@
-const Logger = require('./log');
-const logger = new Logger();
+const fs = require('fs');
+const zlib = require('zlib');
 
-
-logger.on("some_event", args => {
-  const { id, text } = args;
-  console.log(id, text);
+const readStream = fs.createReadStream("./docs/text.txt", { highWaterMark: 8 });
+const writeStream = fs.createWriteStream("./docs/new-text.txt", {
+  highWaterMark: 8,
 });
+const compressStream = zlib.createGzip();
 
-logger.log('User logged!');
+
+const hanleError = () => {
+	console.log('Error');
+	readStream.destroy();
+	writeStream.end('Finish with error...')
+}
+readStream
+	.on('error', hanleError)
+	.pipe(compressStream)
+	.pipe(writeStream)
+	.on('error', hanleError);
