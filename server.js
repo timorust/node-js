@@ -39,12 +39,32 @@ app.get("/contacts", (req, res) => {
 
 app.get("/posts/:id", (req, res) => {
   const title = "Post";
-  res.render(createPath("post"), { title });
+
+  const post = {
+    id: "1",
+    text: "Lorem ipsum dolor sit amet consectetur adipisicing elit.",
+    title: "Post title",
+    date: "04.05.2022",
+    author: "Timor",
+  };
+
+  res.render(createPath("post"), { title, post });
 });
 
 app.get("/posts", (req, res) => {
-  const title = "Posts";
-  res.render(createPath("posts"), { title });
+	const title = "Posts";
+	
+	const posts = [
+    {
+      id: "1",
+      text: "Lorem ipsum dolor sit amet consectetur adipisicing elit.",
+      title: "Post title",
+      date: "04.05.2022",
+      author: "Timor",
+    },
+  ];
+
+  res.render(createPath("posts"), { title, posts });
 });
 
 app.get("/add-post", (req, res) => {
