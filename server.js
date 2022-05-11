@@ -6,22 +6,27 @@ const postRoutes = require('./routes/post-routes');
 const postApiRoutes = require('./routes/api-post-routes');
 const contactRoutes = require('./routes/contact-routes');
 const createPath = require("./helpers/create-path");
+const chalk = require('chalk');
+require('dotenv').config();
+
+const errorMsg = chalk.bgKeyword('white').redBright;
+const successMsg = chalk.bgKeyword('green').white;
 
 const app = express();
 
 app.set("views engine", "ejs");
 
-const PORT = 3000;
-const db =
-  "mongodb+srv://timor:timor321@cluster1.rchig.mongodb.net/node-blog?retryWrites=true&w=majority";
+
 
 mongoose
-  .connect(db, { useNewUrlParser: true, useUnifiedTopology: true })
-  .then(res => console.log("Connect to DB"))
-  .catch(error => console.log(error));
+  .connect(process.env.MONGO_URL, { useNewUrlParser: true, useUnifiedTopology: true })
+  .then(res => console.log(successMsg("Connect to DB")))
+  .catch(error => console.log(errorMsg(error)));
 
-app.listen(PORT, error => {
-  error ? console.log(error) : console.log(`Listening port ${PORT}`);
+app.listen(process.env.PORT, error => {
+  error
+    ? console.log(errorMsg(error))
+    : console.log(successMsg(`Listening port ${process.env.PORT}`));
 });
 
 app.use(
